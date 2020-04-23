@@ -70,9 +70,15 @@ router.get("/sneakers/kids", (req, res) => {
 });
 
 router.get("/one-product/:id", (req, res) => {
-  res.send("one_product");
+  Sneakers.findById(req.params.id)
+    .then((dbResult) => {
+      res.render("one_product", {
+        sneaker: dbResult,
+      })
+    }).catch((err) => {
+      console.log(err);
+    });
 });
-
 
 router.get("/signin", (req, res) => {
   res.render("signin");
