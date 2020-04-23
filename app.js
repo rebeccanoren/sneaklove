@@ -1,7 +1,7 @@
 require("dotenv").config(); // Required in order to be able to access .env variables through process.env.VARIABLE
 
 require("./config/mongodb"); // database initial setup
-// require("./helpers/hbs"); // utils for hbs templates
+require("./helpers/helpers-hbs"); // utils for hbs templates
 
 // base dependencies
 const express = require("express");
