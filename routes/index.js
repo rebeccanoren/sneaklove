@@ -1,14 +1,27 @@
 const express = require("express");
 const router = express.Router();
-
+const Sneakers = require("../models/Sneaker");
 
 router.get("/", (req, res) => {
   res.render("index");
 });
 
 router.get("/sneakers/collection", (req, res) => {
-  res.render("products");
+  Sneakers.find({})
+    .then((dbResult) => {
+      res.render("products", {
+        sneakers: dbResult,
+        css: ["products.css"],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
+
+// router.get("/sneakers/collection", (req, res) => {
+//   res.render("products");
+// });
 
 router.get("/sneakers/men", (req, res) => {
   res.render("products");
