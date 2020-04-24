@@ -1,5 +1,6 @@
 const express = require("express"); // import express in this module
 const router = new express.Router(); // create an app sub-module (router)
+// const requireAuth = require("../middlewares/requireAuth");
 const Sneaker = require("../models/Sneaker");
 const Tag = require("../models/Tag");
 
