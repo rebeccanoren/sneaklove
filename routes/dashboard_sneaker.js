@@ -1,10 +1,10 @@
 const express = require("express"); // import express in this module
 const router = new express.Router(); // create an app sub-module (router)
-// const requireAuth = require("../middlewares/requireAuth");
+const requireAuth = require("../middlewares/requireAuth");
 const Sneaker = require("../models/Sneaker");
 const Tag = require("../models/Tag");
 
-router.get("/prod-add", (req, res) => {
+router.get("/prod-add", requireAuth, (req, res) => {
   res.render("products_add");
 });
 
@@ -27,7 +27,7 @@ router.post("/add-tag-form", (req, res) => {
     });
 });
 
-router.post("/prod-add", (req, res) => {
+router.post("/prod-add", (req, res, next) => {
   Sneaker.create(req.body)
     .then((dbResult) => {
       Sneaker.find({})
@@ -46,7 +46,7 @@ router.post("/prod-add", (req, res) => {
     });
 });
 
-router.get("/prod-manage", (req, res) => {
+router.get("/prod-manage", requireAuth, (req, res) => {
   Sneaker.find({})
     .then(sneakers => {
       Tag.find()
@@ -63,7 +63,7 @@ router.get("/prod-manage", (req, res) => {
     });
 });
 
-router.get("/prod-manage/delete/:id", (req, res, next) => {
+router.get("/prod-manage/delete/:id", requireAuth, (req, res, next) => {
   Sneaker.findByIdAndDelete(req.params.id)
     .then(() => res.redirect("/prod-manage"))
     .catch((err) => {
@@ -71,7 +71,7 @@ router.get("/prod-manage/delete/:id", (req, res, next) => {
     });
 });
 
-router.get('/product-edit/:id', (req, res, next) => {
+router.get('/product-edit/:id', requireAuth, (req, res, next) => {
   Sneaker
     .findById(req.params.id)
     .then(sneaker => {
