@@ -11,6 +11,7 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
 
 // initial config
 const app = express();
@@ -22,24 +23,24 @@ hbs.registerPartials(path.join(__dirname + "/views/partials"))
 // Register the location of your partials for hbs
 // to look at when rendering a view.
 app.use(express.urlencoded({
-  extended: false
+  extended: true
 }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(flash());
 
 // SESSION SETUP
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
-    cookie: {
-      maxAge: 60000
-    }, // in millisec
     store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-      ttl: 24 * 60 * 60 // 1 day
+      mongooseConnection: mongoose.connection
     }),
-    saveUninitialized: true,
-    resave: true
+    secret: "ahard2craaaaackSeCret",
+    cookie: {
+      maxAge: 60000,
+    },
+    saveUninitialized: false,
+    resave: false,
   })
 );
 
@@ -78,7 +79,9 @@ app.use(eraseSessionMessage());
 
 // Getting/Using router(s)
 const basePageRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 app.use("/", basePageRouter);
+app.use("/", authRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on http://localhost:${process.env.PORT}`);

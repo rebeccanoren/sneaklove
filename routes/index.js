@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Sneakers = require("../models/Sneaker");
+const Tag = require("../models/Tag");
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -8,13 +9,17 @@ router.get("/", (req, res) => {
 
 router.get("/sneakers/collection", (req, res) => {
   Sneakers.find({})
-    .then((dbResult) => {
-      res.render("products", {
-        sneakers: dbResult,
-        css: ["products.css"],
-      });
-    })
-    .catch((err) => {
+    .then(sneakers => {
+      Tag.find()
+        .then(tags => {
+          res.render("products", {
+            sneakers,
+            tags
+          })
+        }).catch((err) => {
+          console.log(err);
+        })
+    }).catch((err) => {
       console.log(err);
     });
 });
@@ -23,13 +28,17 @@ router.get("/sneakers/men", (req, res) => {
   Sneakers.find({
       category: "men"
     })
-    .then((dbResult) => {
-      res.render("products", {
-        sneakers: dbResult,
-        css: ["products.css"],
-      });
-    })
-    .catch((err) => {
+    .then(sneakers => {
+      Tag.find()
+        .then(tags => {
+          res.render("products", {
+            sneakers,
+            tags
+          })
+        }).catch((err) => {
+          console.log(err);
+        })
+    }).catch((err) => {
       console.log(err);
     });
 });
@@ -38,13 +47,17 @@ router.get("/sneakers/women", (req, res) => {
   Sneakers.find({
       category: "women"
     })
-    .then((dbResult) => {
-      res.render("products", {
-        sneakers: dbResult,
-        css: ["products.css"],
-      });
-    })
-    .catch((err) => {
+    .then(sneakers => {
+      Tag.find()
+        .then(tags => {
+          res.render("products", {
+            sneakers,
+            tags
+          })
+        }).catch((err) => {
+          console.log(err);
+        })
+    }).catch((err) => {
       console.log(err);
     });
 });
@@ -53,20 +66,19 @@ router.get("/sneakers/kids", (req, res) => {
   Sneakers.find({
       category: "kids"
     })
-    .then((dbResult) => {
-      res.render("products", {
-        sneakers: dbResult,
-        css: ["products.css"],
-      });
-    })
-    .catch((err) => {
+    .then(sneakers => {
+      Tag.find()
+        .then(tags => {
+          res.render("products", {
+            sneakers,
+            tags
+          })
+        }).catch((err) => {
+          console.log(err);
+        })
+    }).catch((err) => {
       console.log(err);
     });
-});
-
-
-router.get("/sneakers/kids", (req, res) => {
-  res.render("products");
 });
 
 router.get("/one-product/:id", (req, res) => {
@@ -84,9 +96,9 @@ router.get("/signin", (req, res) => {
   res.render("signin");
 });
 
-router.get("/signup", (req, res) => {
-  res.render("signup");
-});
+// router.get("/signup", (req, res) => {
+//   res.render("signup");
+// });
 
 
 module.exports = router;
