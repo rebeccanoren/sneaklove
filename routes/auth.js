@@ -28,14 +28,13 @@ router.post("/signup", (req, res, next) => {
     })
     .then(user => {
       if (user !== null) {
-        req.flash("error", "The username already exists!");
-        console.log("Test")
+        req.session.msg = {
+          status: 404,
+          text: "The username already exists!",
+        }
+        console.log(req.session.msg)
         res.redirect("/signup");
 
-        // res.render("signup", {
-        //   msg: "The username already exists!"
-        // });
-        // return;
       } else {
         const salt = bcrypt.genSaltSync(bcryptSalt);
         const hashPass = bcrypt.hashSync(password, salt);
@@ -72,7 +71,10 @@ router.post("/signin", (req, res) => {
     .then((foundUser) => {
       // If a user is not found, redirect to get("/signin") with an error message.
       if (!foundUser) {
-        req.flash("msg", "Invalid credentials....");
+        req.session.msg = {
+          status: 404,
+          text: "No user found!",
+        }
         res.redirect("signin");
       } else {
         // If we're here, it means a user was found, we compare the password
@@ -84,7 +86,10 @@ router.post("/signin", (req, res) => {
           // Login user...
         } else {
           // If the password didn't match, redirect to signin with an error message.
-          req.flash("msg", "Invalid credentials...");
+          req.session.msg = {
+            status: 404,
+            text: "Wrong password",
+          }
           res.redirect("signin");
         }
       }

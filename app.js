@@ -11,7 +11,6 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
-const flash = require("connect-flash");
 
 // initial config
 const app = express();
@@ -27,20 +26,20 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(flash());
 
 // SESSION SETUP
 app.use(
   session({
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection
-    }),
-    secret: "ahard2craaaaackSeCret",
+    secret: process.env.SESSION_SECRET,
     cookie: {
-      maxAge: 60000,
-    },
-    saveUninitialized: false,
-    resave: false,
+      maxAge: 60000
+    }, // in millisec
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      ttl: 24 * 60 * 60 // 1 day
+    }),
+    saveUninitialized: true,
+    resave: true
   })
 );
 
@@ -70,9 +69,11 @@ function eraseSessionMessage() {
       }
       ++count; // increment counter
     }
+    res.locals.msg = req.session.msg
     next(); // continue to the requested route
   };
 }
+
 
 app.use(checkloginStatus);
 app.use(eraseSessionMessage());
@@ -80,8 +81,10 @@ app.use(eraseSessionMessage());
 // Getting/Using router(s)
 const basePageRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
+const sneakersRouter = require("./routes/dashboard_sneaker");
 app.use("/", basePageRouter);
 app.use("/", authRouter);
+app.use("/", sneakersRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on http://localhost:${process.env.PORT}`);

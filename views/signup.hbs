@@ -3,10 +3,9 @@
     <h1 class="form-title">Start your SneakLove journey</h1>
     <p class="form-subtitle">Enjoy yourself and be comfortable </p>
   </header>
-  {{#if error}}
-  hey
-  <p class="msgstatus">{{error}}</p>
-  {{!-- <p class="message {{msg.status}}">{{msg.text}}</p> --}}
+  {{#if msg}}
+
+  <p class="message {{msg.status}}">{{msg.text}}</p>
   {{/if}}
   <form action="/signup" method="post" id="form_user">
     <div class="form-item-wrapper flexed-item">

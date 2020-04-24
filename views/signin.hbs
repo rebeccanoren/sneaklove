@@ -4,8 +4,7 @@
     <p class="form-subtitle">Enjoy yourself and be comfortable </p>
   </header>
   {{#if msg}}
-  <p class="msgstatus">{{msg}}</p>
-  {{!-- <p class="message {{msg.status}}">{{msg.text}}</p> --}}
+  <p class="message {{msg.status}}">{{msg.text}}</p>
   {{/if}}
   <form method="post" action="/signin" id="form_user">
     <div class="form-item-wrapper flexed-item">
